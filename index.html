@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visualizar PDF a Pantalla Completa</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%; /* Asegura que html y body ocupen el 100% de la altura del viewport */
+            overflow: hidden; /* Evita barras de desplazamiento innecesarias si el contenido no se ajusta */
+        }
+        iframe {
+            display: block; /* Elimina el espacio extra debajo del iframe */
+            width: 95%;
+            height: 95%;
+            border: none;
+            margin: 0 auto; /* Centra el iframe horizontalmente */
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <iframe src="paradox.pdf" type="application/pdf">
+        <p>Tu navegador no soporta iframes. Puedes descargar el PDF directamente haciendo clic <a href="paradox.pdf">aquí</a>.</p>
+    </iframe>
+
+</body>
+</html>
