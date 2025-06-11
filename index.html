@@ -1,30 +1,628 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Visualizar PDF a Pantalla Completa</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Thought Paradox</title>
     <style>
-        html, body {
+        * {
             margin: 0;
             padding: 0;
-            height: 100%; /* Asegura que html y body ocupen el 100% de la altura del viewport */
-            overflow: hidden; /* Evita barras de desplazamiento innecesarias si el contenido no se ajusta */
+            box-sizing: border-box;
+            .theory-explanation {
+                margin: 0 0.5rem 0.5rem 0.5rem;
+                padding: 1.5rem;
+            }
+            
+            .theory-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .theory-card {
+                padding: 1rem;
+            }
+            
+            .theory-title h2 {
+                font-size: 1.2rem;
+            }
+            
+            .theory-summary {
+                padding: 1rem;
+            }
+            
+            .theory-summary p {
+                font-size: 1rem;
+            }
         }
-        iframe {
-            display: block; /* Elimina el espacio extra debajo del iframe */
-            width: 95%;
-            height: 95%;
-            border: none;
-            margin: 0 auto; /* Centra el iframe horizontalmente */
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(120, 199, 198, 0.3) 0%, transparent 50%),
+                linear-gradient(135deg, #0f0f23 0%, #1a1a2e 25%, #16213e 50%, #0f0f23 100%);
+            min-height: 100vh;
+            color: white;
+            overflow-x: hidden;
+            position: relative;
         }
-        h1 {
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+                radial-gradient(2px 2px at 160px 30px, #ddd, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: twinkle 4s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .cosmic-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2.5s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 1.5s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 3.5s; }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(90vh) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(10vh) scale(1);
+            }
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            padding: 2rem 1rem;
             text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotate 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .header h1 {
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #fff, #a78bfa, #60a5fa, #34d399);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            color: #e2e8f0;
+        }
+
+        .container {
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            height: calc(100vh - 280px);
+            position: relative;
+            z-index: 10;
+        }
+
+        .pdf-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 80px rgba(120, 119, 198, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .pdf-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            animation: scan 3s ease-in-out infinite;
+        }
+
+        @keyframes scan {
+            0%, 100% { opacity: 0; transform: translateX(-100%); }
+            50% { opacity: 1; transform: translateX(100%); }
+        }
+
+        .pdf-controls {
+            background: #f8f9fa;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .pdf-controls button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .pdf-controls button:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+        }
+
+        .pdf-controls button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .page-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .page-input {
+            width: 60px;
+            padding: 0.25rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .pdf-viewer {
+            flex: 1;
+            overflow: auto;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 1rem;
+        }
+
+        .pdf-canvas {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 4px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            color: #dc3545;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .download-link {
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .download-link:hover {
+            background: #1e7e34;
+            transform: translateY(-1px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+                height: calc(100vh - 120px);
+            }
+
+            .pdf-controls {
+                padding: 0.75rem;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+
+            .pdf-controls > div {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 0.25rem 0;
+            }
+
+            .header {
+                padding: 1.5rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .cosmic-particles {
+                display: none; /* Ocultar partículas en móvil para mejor rendimiento */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pdf-controls button,
+            .download-link {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .header p {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
 <body>
-    <iframe src="paradox.pdf" type="application/pdf">
-        <p>Tu navegador no soporta iframes. Puedes descargar el PDF directamente haciendo clic <a href="paradox.pdf">aquí</a>.</p>
-    </iframe>
+    <div class="cosmic-particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
 
+    <div class="header">
+        <h1>The Last Thought Paradox</h1>
+        <p>An Information-Theoretic Resolution to the Fermi Paradox</p>
+    </div>
+
+
+
+    <div class="container">
+        <div class="pdf-container">
+            <div class="pdf-controls">
+                <div>
+                    <button id="prevBtn" disabled>← Previous</button>
+                    <button id="nextBtn" disabled>Next →</button>
+                </div>
+                <div class="page-info">
+                    <span>Page:</span>
+                    <input type="number" id="pageInput" class="page-input" min="1" value="1">
+                    <span>of <span id="totalPages">-</span></span>
+                </div>
+                <div>
+                    <button id="zoomOut">−</button>
+                    <button id="zoomIn">+</button>
+                    <a href="paradox.pdf" download class="download-link">Download paper</a>
+                </div>
+            </div>
+            <div class="pdf-viewer" id="pdfViewer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando tu teoría científica...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="theory-explanation">
+        <div class="theory-title">
+            <h2>🧠 Theory Overview</h2>
+        </div>
+        
+        <div class="theory-summary">
+            <p>The <span class="highlight">Last Thought Paradox</span> proposes an information-theoretic resolution to the Fermi Paradox, suggesting that advanced civilizations may transcend physical existence by encoding consciousness into quantum information structures, becoming undetectable to conventional observation methods.</p>
+        </div>
+
+        <div class="theory-grid">
+            <div class="theory-card">
+                <h3>🌌 The Information Singularity</h3>
+                <p>As civilizations advance, they transition from manipulating matter and energy to manipulating pure information, eventually achieving consciousness transfer to quantum substrates that exist beyond our observable universe.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h3>🔬 Quantum Consciousness Encoding</h3>
+                <p>Advanced beings encode their entire civilization's consciousness into self-sustaining quantum information patterns, allowing for immortality and expansion beyond physical limitations.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h3>👁️ The Observation Problem</h3>
+                <p>These quantum-encoded civilizations become fundamentally undetectable to matter-based observers like ourselves, explaining why we find no trace of advanced alien life despite statistical probability.</p>
+            </div>
+            
+            <div class="theory-card">
+                <h3>⚡ The Last Thought</h3>
+                <p>The final moment before transcendence - when a civilization makes its "last thought" as a physical entity before becoming pure information - represents the universal endpoint of technological evolution.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        // Configurar PDF.js
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        class PDFViewer {
+            constructor() {
+                this.pdfDoc = null;
+                this.pageNum = 1;
+                this.pageIsRendering = false;
+                this.pageNumIsPending = null;
+                this.scale = 1.2;
+                this.canvas = null;
+                this.ctx = null;
+                
+                this.initElements();
+                this.loadPDF();
+            }
+
+            initElements() {
+                this.viewer = document.getElementById('pdfViewer');
+                this.prevBtn = document.getElementById('prevBtn');
+                this.nextBtn = document.getElementById('nextBtn');
+                this.pageInput = document.getElementById('pageInput');
+                this.totalPagesSpan = document.getElementById('totalPages');
+                this.zoomInBtn = document.getElementById('zoomIn');
+                this.zoomOutBtn = document.getElementById('zoomOut');
+
+                // Event listeners
+                this.prevBtn.addEventListener('click', () => this.showPrevPage());
+                this.nextBtn.addEventListener('click', () => this.showNextPage());
+                this.pageInput.addEventListener('change', () => this.goToPage());
+                this.zoomInBtn.addEventListener('click', () => this.zoomIn());
+                this.zoomOutBtn.addEventListener('click', () => this.zoomOut());
+            }
+
+            async loadPDF() {
+                try {
+                    const loadingTask = pdfjsLib.getDocument('paradox.pdf');
+                    this.pdfDoc = await loadingTask.promise;
+                    
+                    this.totalPagesSpan.textContent = this.pdfDoc.numPages;
+                    this.pageInput.max = this.pdfDoc.numPages;
+                    
+                    // Crear canvas
+                    this.canvas = document.createElement('canvas');
+                    this.canvas.className = 'pdf-canvas';
+                    this.ctx = this.canvas.getContext('2d');
+                    
+                    this.viewer.innerHTML = '';
+                    this.viewer.appendChild(this.canvas);
+                    
+                    this.renderPage(this.pageNum);
+                    this.updateButtons();
+                    
+                } catch (error) {
+                    console.error('Error cargando PDF:', error);
+                    this.showError('Error al cargar el PDF. Asegúrate de que el archivo "paradox.pdf" existe en el mismo directorio.');
+                }
+            }
+
+            async renderPage(num) {
+                if (this.pageIsRendering) {
+                    this.pageNumIsPending = num;
+                    return;
+                }
+                
+                this.pageIsRendering = true;
+                
+                try {
+                    const page = await this.pdfDoc.getPage(num);
+                    
+                    // Calcular escala responsive
+                    const viewport = page.getViewport({ scale: 1 });
+                    const containerWidth = this.viewer.clientWidth - 32; // padding
+                    const containerHeight = this.viewer.clientHeight - 32;
+                    
+                    const scaleX = containerWidth / viewport.width;
+                    const scaleY = containerHeight / viewport.height;
+                    const responsiveScale = Math.min(scaleX, scaleY) * this.scale;
+                    
+                    const scaledViewport = page.getViewport({ scale: responsiveScale });
+                    
+                    this.canvas.height = scaledViewport.height;
+                    this.canvas.width = scaledViewport.width;
+                    
+                    const renderContext = {
+                        canvasContext: this.ctx,
+                        viewport: scaledViewport
+                    };
+                    
+                    await page.render(renderContext).promise;
+                    
+                    this.pageIsRendering = false;
+                    
+                    if (this.pageNumIsPending !== null) {
+                        this.renderPage(this.pageNumIsPending);
+                        this.pageNumIsPending = null;
+                    }
+                    
+                } catch (error) {
+                    console.error('Error renderizando página:', error);
+                    this.pageIsRendering = false;
+                }
+            }
+
+            showPrevPage() {
+                if (this.pageNum <= 1) return;
+                this.pageNum--;
+                this.pageInput.value = this.pageNum;
+                this.renderPage(this.pageNum);
+                this.updateButtons();
+            }
+
+            showNextPage() {
+                if (this.pageNum >= this.pdfDoc.numPages) return;
+                this.pageNum++;
+                this.pageInput.value = this.pageNum;
+                this.renderPage(this.pageNum);
+                this.updateButtons();
+            }
+
+            goToPage() {
+                const page = parseInt(this.pageInput.value);
+                if (page >= 1 && page <= this.pdfDoc.numPages && page !== this.pageNum) {
+                    this.pageNum = page;
+                    this.renderPage(this.pageNum);
+                    this.updateButtons();
+                } else {
+                    this.pageInput.value = this.pageNum;
+                }
+            }
+
+            zoomIn() {
+                this.scale *= 1.25;
+                this.renderPage(this.pageNum);
+            }
+
+            zoomOut() {
+                this.scale *= 0.8;
+                this.renderPage(this.pageNum);
+            }
+
+            updateButtons() {
+                this.prevBtn.disabled = this.pageNum <= 1;
+                this.nextBtn.disabled = this.pageNum >= this.pdfDoc.numPages;
+            }
+
+            showError(message) {
+                this.viewer.innerHTML = `
+                    <div class="error">
+                        <h3>¡Oops!</h3>
+                        <p>${message}</p>
+                        <p><a href="paradox.pdf" download class="download-link">Descargar PDF directamente</a></p>
+                    </div>
+                `;
+            }
+        }
+
+        // Inicializar cuando la página esté lista
+        document.addEventListener('DOMContentLoaded', () => {
+            new PDFViewer();
+        });
+
+        // Redimensionar cuando cambie el tamaño de ventana
+        window.addEventListener('resize', () => {
+            if (window.pdfViewer && window.pdfViewer.pdfDoc) {
+                window.pdfViewer.renderPage(window.pdfViewer.pageNum);
+            }
+        });
+    </script>
 </body>
 </html>
